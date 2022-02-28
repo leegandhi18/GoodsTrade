@@ -1,9 +1,36 @@
-const express = require("express");
+const express = require('express');
+const logger = require('../lib/logger');
+const userRouter = require('./user');
+const postSaleRouter = require('./postSale');
+const postPurchaseRouter = require('./postPurchase');
+const categoryRouter = require('./category');
 
 const router = express.Router();
 
-router.get("/", (req, res, next) => {
-  res.send("<h1>hello world</h1>");
+/* GET home page. */
+router.get('/', (req, res, next) => {
+  res.render('index', { title: 'Express' });
 });
+
+// logTest
+router.get('/log-test', (req, res, next) => {
+  logger.error('This message is error');
+  logger.warn('This message is warn');
+  logger.info('This message is info');
+  logger.verbose('This message is verbose');
+  logger.debug('This message is debug');
+  logger.silly('This message is silly');
+
+  res.send('log test');
+});
+
+// user
+router.use('/users', userRouter);
+// postSale
+router.use('/postSales', postSaleRouter);
+// postPurchase
+router.use('/postPurchases', postPurchaseRouter);
+// category
+router.use('/categories', categoryRouter);
 
 module.exports = router;
